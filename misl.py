@@ -82,7 +82,8 @@ class ActionMan(object):
             self.log('no covers for this album')
             return
         elif len(covers) > 1:
-            return self.ask(covers)
+            idx = int(self.ask(covers))
+            return covers[idx]
         else:
             self.log('only one image found, using it as the cover image')
             return covers[0]
@@ -92,12 +93,12 @@ class ActionMan(object):
         return extension.lower() == '.mp3'
 
     def is_album(self, filenames):
-        self.log('is_album %s')
+        self.log('is_album') 
         for name in filenames:
             # basename, extension = path.splitext(name)
             # if extension == '.mp3':
             if self.is_mp3(name):
-                self.log('YES I AM AN ALBUM!')
+                #self.log('YES I AM AN ALBUM!')
                 return True
         return False
 
