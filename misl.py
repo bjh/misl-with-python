@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import fnmatch
 from os import walk, path
-from sys import exit
-import eyeD3
+from sys import exit, stdout
+#import eyeD3
+import tags
 import argparse
 
 # tag = eyeD3.Tag()
@@ -28,6 +29,7 @@ parser.add_argument('-p', '--path', default=None, action='store', dest='path', h
 class ActionMan(object):
     def __init__(self, directory):
         self.d = directory
+        self.tags = tags.Tags()
         self.logging = True
 
     def log(self, message):
@@ -38,7 +40,7 @@ class ActionMan(object):
         '''
         collect all the images in the list of filenames
         '''
-        self.log('find_covers')
+        #self.log('find_covers')
         image_exts = ['.jpg', '.gif', '.png', '.bmp', '.jpeg']
 
         covers = []
@@ -47,7 +49,7 @@ class ActionMan(object):
             if extension in image_exts:
                 covers.append(name)
 
-        self.log('covers %s' % covers)
+        #self.log('covers %s' % covers)
         return covers
 
     def valid_choice(self, choice):
@@ -57,7 +59,11 @@ class ActionMan(object):
         '''
         ask which image to use for the cover image
         '''
-        self.log('ask')
+        #self.log('ask')
+        stdout.write('\a')
+        stdout.flush()
+        
+        print
         print "which cover to use for this album?"
         count = 0
         for cover in covers:
@@ -77,15 +83,16 @@ class ActionMan(object):
         if there is only one image, use it
         otherwise ask which image to use as the cover
         '''
-        self.log('choose_cover')
+        #self.log('choose_cover')
         if len(covers) <= 0:
             self.log('no covers for this album')
             return
         elif len(covers) > 1:
             idx = int(self.ask(covers))
+            self.log('idx is %s' % idx)
             return covers[idx]
         else:
-            self.log('only one image found, using it as the cover image')
+            #self.log('only one image found, using it as the cover image')
             return covers[0]
 
     def is_mp3(self, filename):
@@ -93,7 +100,7 @@ class ActionMan(object):
         return extension.lower() == '.mp3'
 
     def is_album(self, filenames):
-        self.log('is_album') 
+        #self.log('is_album') 
         for name in filenames:
             # basename, extension = path.splitext(name)
             # if extension == '.mp3':
@@ -106,15 +113,12 @@ class ActionMan(object):
         '''
         add the selected image as a front cover image in the ID3 tags
         '''
-        self.log('add_cover_to_mp3s % s' % cover)
+        #self.log('add_cover_to_mp3s % s' % cover)
+        filenames.sort()
         for name in filenames:
             if self.is_mp3(name):
-                mp3 = directory + '/' + name
-                image = directory + '/' + cover
-                tag = eyeD3.Tag()
-                tag.link(mp3)
-                tag.addImage(0x03, image)
-                tag.update()
+                self.tags.update_image(cover, directory, name)
+                
 
     def dry_run(self):
         '''
@@ -132,7 +136,6 @@ class ActionMan(object):
         for dirname, dirnames, filenames in walk(self.d):
             print '-' * 70
             print "processing album: %s" % dirname
-            print
             cover = self.choose_cover(self.find_covers(filenames))
             
             if cover:
