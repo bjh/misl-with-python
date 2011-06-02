@@ -7,4 +7,3 @@ it will ask you which image to use if there are multiple images found
 
 todo
 ====
-- don't overwrite existing image ID3 tags (or ask to change value)
