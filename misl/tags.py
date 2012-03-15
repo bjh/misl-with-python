@@ -7,6 +7,8 @@ class Tags(object):
         mp3 = directory + '/' + name
         image = directory + '/' + cover
         
+        # print "%s %s" % (mp3, image)
+        
         tag = eyeD3.Tag()
         tag.link(mp3)
         

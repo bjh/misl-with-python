@@ -67,7 +67,7 @@ class ActionMan(object):
         if there is only one image, use it
         otherwise ask which image to use as the cover
         '''
-        #self.log('choose_cover')
+        self.log('choose_cover')
         if len(covers) <= 0:
             self.log('no covers for this album')
             return
@@ -97,7 +97,7 @@ class ActionMan(object):
         '''
         add the selected image as a front cover image in the ID3 tags
         '''
-        #self.log('add_cover_to_mp3s % s' % cover)
+        self.log('add_cover_to_mp3s % s' % cover)
         filenames.sort()
         for name in filenames:
             if self.is_mp3(name):
