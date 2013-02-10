@@ -123,8 +123,6 @@ class ActionMan(object):
 			
 			if cover:
 				self.add_cover_to_mp3s(cover, dirname, filenames)
->>>>>>> b1bae5682e1d098a7b4b530e7f7d07c3f5a3e290
-
 
 #if __name__ == '__main__':
 
